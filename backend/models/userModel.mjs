@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   username: {
-    type:String,
+    type: String,
     unique: true,
     required: true,
     lowercase: true,
@@ -16,16 +16,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     lowercase: true,
     trim: true,
-    minlength: [13, "Email must be at least 13 characters long"]
+    minlength: [5, "Email must be at least 5 characters long"]
   },
 
   password: {
     type: String,
-    rqeuired: true,
+    required: true,
     minlength: [8, "Password must be at least 8 characters long"],
     trim: true,
   }
-
 })
 
 const User = mongoose.model("user", userSchema);

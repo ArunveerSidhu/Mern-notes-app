@@ -9,16 +9,16 @@ const notesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  user:{
+  user: {
     ref: "user",
     required: true,
   },
-  isPinned:{
-    type: boolean,
+  isPinned: {
+    type: Boolean,
     default: false
   },
-  isArchived:{
-    type: boolean,
+  isArchived: {
+    type: Boolean,
     default: false
   }
 })
