@@ -10,6 +10,7 @@ const notesSchema = new mongoose.Schema({
     required: true,
   },
   user: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: "user",
     required: true,
   },
@@ -21,7 +22,9 @@ const notesSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
+}, {
+  timestamps: true
 })
 
-const note = mongoose.model("note", notesSchema);
-export default note;
+const Note = mongoose.model("note", notesSchema);
+export default Note;
