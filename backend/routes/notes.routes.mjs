@@ -1,104 +1,143 @@
 import express from 'express';
-import Note from '../models/notesModel.mjs'; // Import the Note model
+import note from "../models/notesModel.mjs"
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
 
-
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization.split(' ')[1];
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({msg:"unauthorized request"})
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Unauthorized" });
+  jwt.verify(token, process.env.JWT_SECRET,(err, decoded)=>{
+    if(err){
+      return res.status(401).json({msg:"unauthorized request"})
     }
-    req.userId = decoded.userId; 
+    req.userId = decoded.userId;
     next();
-  });
-};
-
+  })
+}
 
 router.post('/', verifyToken, async (req, res) => {
   try {
-    const { title, content } = req.body;
-    const newNote = new Note({
+    const {title, content} = req.body;
+    const newNote = new note({
       title,
       content,
-      user: req.userId 
-    });
+      user: req.userId
+    })
     await newNote.save();
-    res.status(201).json({
-      message: "Note created successfully",
-      note: newNote
-    });
+    res.status(201).json({msg:"Note created successfully", note: newNote});
   } catch (error) {
-    res.status(500).json({
-      message: "Error creating note",
-      error: error.message
-    });
+    res.status(500).json({msg:"Internal server error"});
   }
-});
+})
 
-
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', verifyToken, async(req,res)=>{
   try {
-    const notes = await Note.find({ user: req.userId });
+    const notes = await note.find({user: req.userId})
     res.status(200).json(notes);
   } catch (error) {
     res.status(500).json({
-      message: "Error retrieving notes",
+      msg: "error getting notes",
       error: error.message
-    });
+    })
   }
-});
+})
 
-
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', verifyToken, async(req,res)=>{
   try {
-    const { title, content } = req.body;
-    const updatedNote = await Note.findByIdAndUpdate(
+    const {title, content} = req.body
+    const updatedNote = await note.findByIdAndUpdate(
       req.params.id,
-      { title, content },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedNote) {
-      return res.status(404).json({ message: "Note not found" });
+      {title, content},
+      {new: true, runValidators: true}
+    )
+    if (!updatedNote){
+      return res.status(400).json({msg:"note not found"})
     }
 
     res.status(200).json({
-      message: "Note updated successfully",
+      msg:"note updated successfully",
       note: updatedNote
-    });
+    })
   } catch (error) {
     res.status(500).json({
-      message: "Error updating note",
+      msg:"error updating note",
       error: error.message
-    });
+    })
   }
-});
+})
 
-
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', verifyToken, async(req,res)=>{
   try {
-    const deletedNote = await Note.findByIdAndDelete(req.params.id);
-
-    if (!deletedNote) {
-      return res.status(404).json({ message: "Note not found" });
+    const deletedNote = await note.findByIdAndDelete(req.params.id)
+    if(!deletedNote){
+      return res.status(400).json({
+        msg: "note not found"
+      })
     }
+    res.status(200).json({
+    msg: "note deleted successfully"
+  })
+  } catch (error) {
+    res.status(500).json({
+      msg: "error deleting note",
+      error: error.message
+    })
+  }
+})
+
+router.patch('/:id/pin', verifyToken, async (req, res)=> {
+  try {
+    const notToUpdate = await note.findById(req.params.id)
+    if (!notToUpdate) {
+      return res.status(400).json({
+        msg:"error finding the note"
+      })
+    }
+    notToUpdate.isPinned = !notToUpdate.isPinned
+    await notToUpdate.save()
 
     res.status(200).json({
-      message: "Note deleted successfully"
-    });
+      msg : "pin status updated successfully",
+      note: notToUpdate
+    })
+
   } catch (error) {
     res.status(500).json({
-      message: "Error deleting note",
+      msg: "error updating pin status",
       error: error.message
-    });
+    })
   }
-});
+})
+
+router.patch('/:id/archive', verifyToken, async(req,res)=>{
+  try {
+    const notToUpdate = await note.findById(req.params.id)
+    if (!notToUpdate) {
+      return res.status(400).json({
+        msg:"error finding the note"
+      })
+    }
+
+    notToUpdate.isArchived = !notToUpdate.isArchived
+    await notToUpdate.save()
+
+    res.status(200).json({
+      msg : "archive status updated successfully",
+      note: notToUpdate
+    })
+  } catch (error) {
+    res.status(500).json({
+      msg: "error updating archive status",
+      error: error.message
+    })
+  }
+})
 
 export default router;
