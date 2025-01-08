@@ -5,7 +5,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/api/users/login', {
@@ -23,7 +23,7 @@ const Login = () => {
     <>
       <div className='h-screen w-screen flex justify-center items-center bg-slate-800'>
         <div className='h-96 w-64 flex justify-center items-center'>
-          <form onSubmit={handleLogin} className="bg-white p-4 rounded-lg shadow-md border border-white">
+          <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow-md border border-white">
             <input
               type="email"
               value={email}
