@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
-router.post('/api/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const existingUser = await User.findOne({ email })
