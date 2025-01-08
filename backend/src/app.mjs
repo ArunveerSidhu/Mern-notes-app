@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "../config/db.mjs";
 import userRoutes from "../routes/user.routes.mjs"
 import notesRoutes from "../routes/notes.routes.mjs"
+import cors from 'cors';
 
 dotenv.config();
 
@@ -12,6 +13,8 @@ const port = process.env.PORT;
 app.use(express.json());
 
 connectDB();
+
+app.use(cors());
 
 app.use('/api/users', userRoutes);
 app.use('/api/notes', notesRoutes);

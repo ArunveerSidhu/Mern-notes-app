@@ -1,10 +1,11 @@
 import React from 'react'
+import Login from './components/auth/Login'
 
 function App() {
  
   return (
     <>
-      <h1 className="text-red-700">Hello</h1>     
+     <Login />
     </>
   )
 }
