@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  // Check for existing token on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/home');
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,8 +22,11 @@ const Login = () => {
         email,
         password,
       });
-      console.log('Login successful:', response.data);
-      // Handle successful login (e.g., store token, redirect)
+      
+      localStorage.setItem('token', response.data.token);
+      
+      navigate('/home');
+      
     } catch (error) {
       console.error('Login error:', error.response ? error.response.data : error.message);
     }
