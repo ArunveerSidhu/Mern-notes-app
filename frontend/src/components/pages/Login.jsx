@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // Check for existing token on component mount
   useEffect(() => {
@@ -23,7 +25,7 @@ const Login = () => {
         password,
       });
       
-      localStorage.setItem('token', response.data.token);
+      login(response.data.token);
       
       navigate('/home');
       
