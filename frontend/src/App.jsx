@@ -5,25 +5,28 @@ import Register from "./components/pages/Register.jsx";
 import Home from "./components/pages/Home.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { AuthProvider } from "./components/context/AuthContext.jsx";
+import { NotesProvider } from './context/NotesContext';
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Register />} />
-          <Route
-            path="/home"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </Router>
+      <NotesProvider>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Register />} />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Router>
+      </NotesProvider>
     </AuthProvider>
   );
 }
