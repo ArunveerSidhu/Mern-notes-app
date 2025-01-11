@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAuth } from './context/AuthContext';
 
-const SidePanel = () => {
+const SidePanel = ({ isOpen, setIsOpen }) => {
     const { user, logout } = useAuth();
-    const [isOpen, setIsOpen] = useState(true);
 
     return (
         <div className="relative">
-            <div 
+            <div
                 className={`bg-[#FFF5E4] h-screen w-80 fixed top-0 left-0 
                 transition-transform duration-300 ease-in-out shadow-xl
                 border-r border-[#E7C8A0]/30 ${
@@ -25,22 +24,22 @@ const SidePanel = () => {
                                 {user?.username || 'Guest'}
                             </p>
                         </div>
-                        <button 
+                        <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="p-2 rounded-full hover:bg-[#E7C8A0]/20 
                             transition-all duration-300"
                             aria-label="Toggle sidebar"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" 
-                                className="h-5 w-5 text-[#8B7355]" 
-                                fill="none" 
-                                viewBox="0 0 24 24" 
-                                stroke="currentColor"
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 className="h-5 w-5 text-[#8B7355]"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor"
                             >
-                                <path strokeLinecap="round" 
-                                    strokeLinejoin="round" 
-                                    strokeWidth={2} 
-                                    d="M15 19l-7-7 7-7" 
+                                <path strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M15 19l-7-7 7-7"
                                 />
                             </svg>
                         </button>
@@ -78,7 +77,7 @@ const SidePanel = () => {
 
                 {/* Footer Section */}
                 <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <button 
+                    <button
                         onClick={logout}
                         className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 
                         text-[#8B7355] rounded-lg hover:bg-[#E7C8A0]/20 transition-all duration-200"
@@ -93,22 +92,22 @@ const SidePanel = () => {
 
             {/* Toggle button for closed state */}
             {!isOpen && (
-                <button 
+                <button
                     onClick={() => setIsOpen(true)}
                     className="fixed top-4 left-4 p-2.5 rounded-lg bg-[#FFF5E4] 
                     hover:bg-[#E7C8A0]/20 transition-all duration-300 
                     shadow-lg border border-[#E7C8A0]/30 z-50"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" 
-                        className="h-5 w-5 text-[#8B7355]" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         className="h-5 w-5 text-[#8B7355]"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor"
                     >
-                        <path strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M9 5l7 7-7 7" 
+                        <path strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
                         />
                     </svg>
                 </button>

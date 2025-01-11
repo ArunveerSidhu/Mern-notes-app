@@ -43,44 +43,39 @@ router.post('/register', async (req, res) => {
   }
 })
 
-
-router.post('/api/login', async (req, res) => {
-   try {
+router.post('/login', async (req, res) => {
+  try {
     const { email, password } = req.body;
     
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
-      return res.status(400).json({ message: "Invalid credentials" })
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, foundUser.password);
     if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid credentials" })
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign(
-      { 
-        userId: foundUser._id,
-        username: foundUser.username,
-        email: foundUser.email
-      }, 
-      process.env.JWT_SECRET
-    );
+    const token = jwt.sign({ 
+      userId: foundUser._id,
+      username: foundUser.username,
+      email: foundUser.email
+    }, process.env.JWT_SECRET);
     
     res.status(200).json({
       msg: "User logged in successfully",
       token,
       userId: foundUser._id,
       username: foundUser.username
-    })
-
-   } catch (error) {
-     res.status(500).json({
-       message: "error logging in user",
-       error: error.message
-     })
-   }
-})
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error logging in user",
+      error: error.message
+    });
+  }
+});
 
 router.get('/profile', async (req, res) => {
   try {
@@ -152,39 +147,5 @@ router.put('/profile', async (req, res) => {
     });
   }
 })
-
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    const foundUser = await User.findOne({ email });
-    if (!foundUser) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    const isPasswordCorrect = await bcrypt.compare(password, foundUser.password);
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    const token = jwt.sign({ 
-      userId: foundUser._id,
-      username: foundUser.username,
-      email: foundUser.email
-    }, process.env.JWT_SECRET);
-    
-    res.status(200).json({
-      msg: "User logged in successfully",
-      token,
-      userId: foundUser._id,
-      username: foundUser.username
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Error logging in user",
-      error: error.message
-    });
-  }
-});
 
 export default router;

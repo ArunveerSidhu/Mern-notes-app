@@ -25,8 +25,11 @@ const Login = () => {
         password,
       });
       
-      login(response.data.token);
+      if (!response.data.token) {
+        throw new Error('No token received');
+      }
       
+      login(response.data.token);
       navigate('/home');
       
     } catch (error) {

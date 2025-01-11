@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SidePannel from '../SidePanel';
+import SidePanel from '../SidePanel';
+import NotesPanel from '../NotesPanel';
 
 function Home() {
   const navigate = useNavigate();
@@ -17,10 +18,13 @@ function Home() {
     navigate('/login');
   };
 
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
+
   return (
-    <>
-        <SidePannel/>
-    </>
+      <div className="flex">
+        <SidePanel isOpen={isSidePanelOpen} setIsOpen={setIsSidePanelOpen} />
+        <NotesPanel isSidePanelOpen={isSidePanelOpen} />
+      </div>
   );
 }
 
