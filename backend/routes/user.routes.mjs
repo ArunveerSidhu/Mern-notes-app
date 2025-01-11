@@ -23,12 +23,17 @@ router.post('/register', async (req, res) => {
     });
     await newUser.save();
 
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ 
+      userId: newUser._id,
+      username: newUser.username,
+      email: newUser.email
+    }, process.env.JWT_SECRET);
 
     res.status(201).json({
       msg: "User created successfully",
       token,
-      userId: newUser._id
+      userId: newUser._id,
+      username: newUser.username
     })
   } catch (error) {
     res.status(500).json({
@@ -53,12 +58,20 @@ router.post('/api/login', async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" })
     }
 
-    const token = jwt.sign({ userId: foundUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { 
+        userId: foundUser._id,
+        username: foundUser.username,
+        email: foundUser.email
+      }, 
+      process.env.JWT_SECRET
+    );
     
     res.status(200).json({
       msg: "User logged in successfully",
       token,
-      userId: foundUser._id
+      userId: foundUser._id,
+      username: foundUser.username
     })
 
    } catch (error) {
@@ -154,12 +167,17 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: foundUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ 
+      userId: foundUser._id,
+      username: foundUser.username,
+      email: foundUser.email
+    }, process.env.JWT_SECRET);
     
     res.status(200).json({
       msg: "User logged in successfully",
       token,
-      userId: foundUser._id
+      userId: foundUser._id,
+      username: foundUser.username
     });
   } catch (error) {
     res.status(500).json({
